@@ -1,0 +1,18 @@
+ {{subst:Video
+  | cypher = {{cypher}}
+  | original_title = {{original_title}}
+  | decoded_title = {{decoded_title}}
+  | publication_date = {{date}}
+  | duration = {{duration}}
+  | link = {{link}}
+  | infobox_title = {{infobox_title}}
+  | miniature = {{File:filename}}
+  | caption-miniature = {{caption-miniature}}
+  | video_number = {{video_number}}
+  | chapters_count = {{chapters_count}}
+  | music_style = {{music_style}}
+  | chapters =
+  {{chapters}}
+  | encoded_description = {{encoded_description}}
+  | decoded_description = {{decoded_description}}
+  }}
