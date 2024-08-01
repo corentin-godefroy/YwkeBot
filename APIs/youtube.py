@@ -4,6 +4,8 @@ import requests
 import re
 from dotenv import load_dotenv
 
+load_dotenv()
+
 API_KEY = os.getenv('YOUTUBE_API_KEY')
 API_KEY_2 = os.getenv('YOUTUBE_API_KEY_2')
 CHANNEL_ID = os.getenv('THRUTHSAYER_YOUTUBE_ID')

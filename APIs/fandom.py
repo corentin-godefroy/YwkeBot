@@ -6,6 +6,8 @@ import re
 from APIs.youtube import get_video_duration, miniature_downloader
 from dotenv import load_dotenv
 
+load_dotenv()
+
 # Informations sur le wiki et les identifiants
 wiki_url = os.getenv("WIKI_URL")
 username = os.getenv("CGBOT_ID")
@@ -221,6 +223,8 @@ def update_video_page(session, page_link, video_detail):
 
     content = get_page_content(session, 'Category:Vidéo')
     last_number = get_next_video_number_by_content(content)
+
+    content = content[:-2]
 
     # add last video page link
     content += f"|-\n| {last_number} || {publication_date} || [[{page_link}]]\n|}}"
