@@ -54,11 +54,47 @@ def login_to_fandom():
     print("Connecté avec succès.")
     return session
 
+def get_page_content(session, page_title):
+    payload = {
+        'action': 'query',
+        'prop': 'revisions',
+        'titles': page_title,
+        'rvprop': 'content',
+        'formatversion': '2',
+        "format": "json",
+    }
+    page = session.get(wiki_url, params=payload)
+    content = page.json()['query']['pages'][0]['revisions'][0]['content']
+    return content
+
+def get_next_video_number(session):
+    content = get_page_content(session, 'Category:Vidéo')
+    last_number = re.findall(r'\|-(\n\| \d+)', content)[-1]
+    last_number = last_number.split(' ')[1]
+    last_number = int(last_number) + 1
+    return last_number
+
+def get_next_video_number_by_content(content):
+    last_number = re.findall(r'\|-(\n\| \d+)', content)[-1]
+    last_number = last_number.split(' ')[1]
+    last_number = int(last_number) + 1
+    return last_number
+
 
 def create_or_edit_page(session, video_detail):
     miniature_path = miniature_downloader(video_detail)
     file_name = re.sub(r'[#<>[\]|{}]', '', video_detail['snippet']['title'])
     miniature_path = upload_file(session, miniature_path, file_name)
+
+    video_number = get_next_video_number(session)
+    if str(video_number).endswith("1"):
+        video_number = "st"
+    elif str(video_number).endswith("2"):
+        video_number = "nd"
+    elif str(video_number).endswith("3"):
+        video_number = "rd"
+    else:
+        video_number = "th"
 
     description = video_detail['snippet']['description']
     page_title = video_detail['snippet']['title']
@@ -66,9 +102,10 @@ def create_or_edit_page(session, video_detail):
     original_title = page_title
     decoded_title = "''Not decyphered yet''"
     decoded_description = "''Not decyphered yet''"
-    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
-        "%B %d %y %H:%M:%S")
+    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %y %H:%M:%S")
     duration = get_video_duration(video_detail['id'])
+    cypher = "''Not found yet''"
+    music_style = "''Undefined''"
     try:
         duration = isodate.parse_duration(duration)
         total_seconds = int(duration.total_seconds())
@@ -88,9 +125,7 @@ def create_or_edit_page(session, video_detail):
         caption_miniature = re.findall(r'- image credit -\n(.*)', description)[0]
     except:
         caption_miniature = ""
-    video_number = "nth"
-    cypher = "''Not found yet''"
-    music_style = "''Undefined''"
+
 
     timestamps = re.findall(r'(\d{2}:\d{2}) - (.*)', description)
     transformed_timestamps = []
@@ -184,22 +219,8 @@ def update_video_page(session, page_link, video_detail):
         "%B %d %y %H:%M:%S")
     #get the wikicode of this page https://youwillknoweventualy.fandom.com/wiki/Category:Vid%C3%A9o for editing code
 
-    payload = {
-        'action': 'query',
-        'prop': 'revisions',
-        'titles': 'Category:Vidéo',
-        'rvprop': 'content',
-        'formatversion': '2',
-        "format": "json",
-    }
-    page = session.get(wiki_url, params=payload)
-    content = page.json()['query']['pages'][0]['revisions'][0]['content']
-    # remove last |}
-    content = content[:-2]
-
-    last_number = re.findall(r'\|-(\n\| \d+)', content)[-1]
-    last_number = last_number.split(' ')[1]
-    last_number = int(last_number) + 1
+    content = get_page_content(session, 'Category:Vidéo')
+    last_number = get_next_video_number_by_content(content)
 
     # add last video page link
     content += f"|-\n| {last_number} || {publication_date} || [[{page_link}]]\n|}}"
@@ -212,23 +233,15 @@ def update_video_page(session, page_link, video_detail):
         'format': 'json'
     }
     response = session.post(wiki_url, data=payload)
+    return last_number
 
 
 def update_chronology_page(session, page_link, video_detail):
     publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
         "%B %d %y %H:%M:%S")
 
-    payload = {
-        'action': 'query',
-        'prop': 'revisions',
-        'titles': 'Chronology',
-        'rvprop': 'content',
-        'formatversion': '2',
-        "format": "json",
-    }
-    page = session.get(wiki_url, params=payload)
-    content = page.json()['query']['pages'][0]['revisions'][0]['content']
-    # remove last |}
+    content = get_page_content(session, 'Chronology')
+
     content = content[:-2]
 
     last_number = re.findall(r'\|-(\n\| \d+)', content)[-1]
