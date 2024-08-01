@@ -4,11 +4,12 @@ import requests
 from datetime import datetime
 import re
 from APIs.youtube import get_video_duration, miniature_downloader
+from dotenv import load_dotenv
 
 # Informations sur le wiki et les identifiants
-wiki_url = os.environ.get("WIKI_URL")
-username = os.environ.get("CGBOT_ID")
-password = os.environ.get("CGBOT_PASSWORD")
+wiki_url = os.getenv("WIKI_URL")
+username = os.getenv("CGBOT_ID")
+password = os.getenv("CGBOT_PASSWORD")
 
 
 def login_to_fandom():

@@ -2,10 +2,11 @@ import json
 import os
 import requests
 import re
+from dotenv import load_dotenv
 
-API_KEY = os.environ.get('YOUTUBE_API_KEY')
-API_KEY_2 = os.environ.get('YOUTUBE_API_KEY_2')
-CHANNEL_ID = os.environ.get('THRUTHSAYER_YOUTUBE_ID')
+API_KEY = os.getenv('YOUTUBE_API_KEY')
+API_KEY_2 = os.getenv('YOUTUBE_API_KEY_2')
+CHANNEL_ID = os.getenv('THRUTHSAYER_YOUTUBE_ID')
 
 def get_latest_videos(max_results=5):
     if max_results != 0:
