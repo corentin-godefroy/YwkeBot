@@ -10,6 +10,7 @@ wiki_url = os.environ.get("WIKI_URL")
 username = os.environ.get("CGBOT_ID")
 password = os.environ.get("CGBOT_PASSWORD")
 
+
 def login_to_fandom():
     # Créer une session
     session = requests.Session()
@@ -52,9 +53,10 @@ def login_to_fandom():
     print("Connecté avec succès.")
     return session
 
+
 def create_or_edit_page(session, video_detail):
     miniature_path = miniature_downloader(video_detail)
-    file_name = page_title = re.sub(r'[#<>[\]|{}]', '', video_detail['snippet']['title'])
+    file_name = re.sub(r'[#<>[\]|{}]', '', video_detail['snippet']['title'])
     miniature_path = upload_file(session, miniature_path, file_name)
 
     description = video_detail['snippet']['description']
@@ -62,8 +64,9 @@ def create_or_edit_page(session, video_detail):
     page_title = re.sub(r'[#<>[\]|{}]', '', page_title)
     original_title = page_title
     decoded_title = "''Not decyphered yet''"
-    decoded_description  = "''Not decyphered yet''"
-    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %y %H:%M:%S")
+    decoded_description = "''Not decyphered yet''"
+    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
+        "%B %d %y %H:%M:%S")
     duration = get_video_duration(video_detail['id'])
     try:
         duration = isodate.parse_duration(duration)
@@ -174,16 +177,18 @@ def upload_file(session, file_path, file_name):
             os.remove(file_path)
             return filename
 
+
 def update_video_page(session, page_link, video_detail):
-    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %y %H:%M:%S")
+    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
+        "%B %d %y %H:%M:%S")
     #get the wikicode of this page https://youwillknoweventualy.fandom.com/wiki/Category:Vid%C3%A9o for editing code
 
     payload = {
         'action': 'query',
-        'prop':'revisions',
-        'titles':'Category:Vidéo',
-        'rvprop':'content',
-        'formatversion':'2',
+        'prop': 'revisions',
+        'titles': 'Category:Vidéo',
+        'rvprop': 'content',
+        'formatversion': '2',
         "format": "json",
     }
     page = session.get(wiki_url, params=payload)
@@ -200,22 +205,24 @@ def update_video_page(session, page_link, video_detail):
 
     payload = {
         'action': 'edit',
-        'title':'Category:Vidéo',
-        'text':content,
+        'title': 'Category:Vidéo',
+        'text': content,
         'token': session.csrf_token,
-        'format':'json'
+        'format': 'json'
     }
     response = session.post(wiki_url, data=payload)
 
+
 def update_chronology_page(session, page_link, video_detail):
-    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %y %H:%M:%S")
+    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
+        "%B %d %y %H:%M:%S")
 
     payload = {
         'action': 'query',
-        'prop':'revisions',
-        'titles':'Chronology',
-        'rvprop':'content',
-        'formatversion':'2',
+        'prop': 'revisions',
+        'titles': 'Chronology',
+        'rvprop': 'content',
+        'formatversion': '2',
         "format": "json",
     }
     page = session.get(wiki_url, params=payload)
@@ -232,9 +239,33 @@ def update_chronology_page(session, page_link, video_detail):
 
     payload = {
         'action': 'edit',
-        'title':'Chronology',
-        'text':content,
+        'title': 'Chronology',
+        'text': content,
         'token': session.csrf_token,
-        'format':'json'
+        'format': 'json'
     }
     session.post(wiki_url, data=payload)
+
+
+def create_redirection_page(session, video_number, redirection_title):
+    if str(video_number).endswith("1"):
+        th = "st"
+    elif str(video_number).endswith("2"):
+        th = "nd"
+    elif str(video_number).endswith("3"):
+        th = "rd"
+    else:
+        th = "th"
+
+    payload = {
+        'action': 'edit',
+        'title': f"{video_number}{th} video",
+        'text': f"#redirect [[{redirection_title}]]",
+        'token': session.csrf_token,
+        'format': 'json',
+    }
+    response = session.post(wiki_url, data=payload)
+    response_data = response.json()
+
+    if 'error' in response_data:
+        raise Exception(f"Error creating redirection page: {response_data['error']['info']}")
