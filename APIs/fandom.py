@@ -100,7 +100,8 @@ def create_or_edit_page(session, video_detail):
 
     description = video_detail['snippet']['description']
     page_title = video_detail['snippet']['title']
-    page_title = re.sub(r'[#<>[\]|{}]', '', page_title)
+    page_title = re.sub(r'[#<>[\]|{}/:"?*]', '', page_title)
+
     original_title = page_title
     decoded_title = "''Not decyphered yet''"
     decoded_description = "''Not decyphered yet''"
