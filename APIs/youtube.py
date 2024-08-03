@@ -8,7 +8,7 @@ load_dotenv()
 
 API_KEY = os.getenv('YOUTUBE_API_KEY')
 API_KEY_2 = os.getenv('YOUTUBE_API_KEY_2')
-CHANNEL_ID = os.getenv('THRUTHSAYER_YOUTUBE_ID')
+CHANNEL_ID = os.getenv('TRUTHSAYER_YOUTUBE_ID')
 
 def get_latest_videos(max_results=5):
     if max_results != 0:
@@ -70,7 +70,7 @@ def get_last_vids():
 def miniature_downloader(video):
     tumbnail = video['snippet']['thumbnails']['maxres']['url']
     title = video['snippet']['title']
-    title = re.sub(r'[#<>[\]|{}]', '', title)
+    title = re.sub(r'[#<>[\]|{}/]', '', title)
     miniature = requests.get(tumbnail)
     with open(f"{title}.jpg", 'wb') as file:
         file.write(miniature.content)

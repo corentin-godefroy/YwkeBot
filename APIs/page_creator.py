@@ -1,4 +1,5 @@
-from APIs.fandom import create_or_edit_page, update_video_page, update_chronology_page, create_redirection_page
+from APIs.fandom import create_or_edit_page, update_video_page, update_chronology_page, create_redirection_page, \
+    get_next_video_number
 from APIs.youtube import get_video_details
 
 
