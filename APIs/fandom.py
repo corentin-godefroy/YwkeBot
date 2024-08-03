@@ -85,7 +85,7 @@ def get_next_video_number_by_content(content):
 
 def create_or_edit_page(session, video_detail):
     miniature_path = miniature_downloader(video_detail)
-    file_name = re.sub(r'[#<>[\]|{}]', '', video_detail['snippet']['title'])
+    file_name = re.sub(r'[#<>[\]|{}/:]\"?\*', '_', video_detail['snippet']['title'])
     miniature_path = upload_file(session, miniature_path, file_name)
 
     video_number = get_next_video_number(session)

@@ -70,7 +70,7 @@ def get_last_vids():
 def miniature_downloader(video):
     tumbnail = video['snippet']['thumbnails']['maxres']['url']
     title = video['snippet']['title']
-    title = re.sub(r'[#<>[\]|{}/]', '', title)
+    title = re.sub(r'[#<>[\]|{}/:]\"?\*', '_', title)
     miniature = requests.get(tumbnail)
     with open(f"{title}.jpg", 'wb') as file:
         file.write(miniature.content)
