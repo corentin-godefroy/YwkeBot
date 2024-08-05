@@ -105,7 +105,7 @@ def create_or_edit_page(session, video_detail):
     original_title = page_title
     decoded_title = "''Not decyphered yet''"
     decoded_description = "''Not decyphered yet''"
-    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %y %H:%M:%S")
+    publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %Y %H:%M:%S")
     duration = get_video_duration(video_detail['id'])
     cypher = "''Not found yet''"
     music_style = "''Undefined''"
@@ -219,7 +219,7 @@ def upload_file(session, file_path, file_name):
 
 def update_video_page(session, page_link, video_detail):
     publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
-        "%B %d %y %H:%M:%S")
+        "%B %d %Y %H:%M:%S")
     #get the wikicode of this page https://youwillknoweventualy.fandom.com/wiki/Category:Vid%C3%A9o for editing code
 
     content = get_page_content(session, 'Category:Vidéo')
@@ -243,7 +243,7 @@ def update_video_page(session, page_link, video_detail):
 
 def update_chronology_page(session, page_link, video_detail):
     publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime(
-        "%B %d %y %H:%M:%S")
+        "%B %d %Y %H:%M:%S")
 
     content = get_page_content(session, 'Chronology')
 
