@@ -108,6 +108,7 @@ def create_or_edit_page(session, video_detail):
     publication_date = datetime.strptime(video_detail['snippet']['publishedAt'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d %Y %H:%M:%S")
     duration = get_video_duration(video_detail['id'])
     cypher = "''Not found yet''"
+    cypher_2 = "''Not found yet''"
     music_style = "''Undefined''"
     try:
         duration = isodate.parse_duration(duration)
@@ -170,6 +171,7 @@ def create_or_edit_page(session, video_detail):
     template = template.replace("{{duration}}", video_duration)
     template = template.replace("{{cypher}}", cypher)
     template = template.replace("{{decoded_description}}", decoded_description)
+    template = template.replace("{{cypher_2}}", cypher_2)
 
     # Payload pour la création/modification de la page
     edit_payload = {

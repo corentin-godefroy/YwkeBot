@@ -1,5 +1,6 @@
  {{subst:Video
   | cypher = {{cypher}}
+  | cypher_2 = {{cypher_2}}
   | original_title = {{original_title}}
   | decoded_title = {{decoded_title}}
   | publication_date = {{date}}
