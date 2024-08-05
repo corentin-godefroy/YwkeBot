@@ -90,13 +90,13 @@ def create_or_edit_page(session, video_detail):
 
     video_number = get_next_video_number(session)
     if str(video_number).endswith("1"):
-        video_number += "st"
+        video_number = str(video_number) + "st"
     elif str(video_number).endswith("2"):
-        video_number += "nd"
+        video_number = str(video_number) + "nd"
     elif str(video_number).endswith("3"):
-        video_number += "rd"
+        video_number = str(video_number) + "rd"
     else:
-        video_number += "th"
+        video_number = str(video_number) + "th"
 
     description = video_detail['snippet']['description']
     page_title = video_detail['snippet']['title']
