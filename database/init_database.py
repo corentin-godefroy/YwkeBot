@@ -2,10 +2,12 @@ import os
 from sqlite3 import Connection
 
 from YwkeBot.database.video import init_video
+from YwkeBot.database.video_logs import init_video_logs
 
 
 def init_database():
     init_video()
+    init_video_logs()
 
     with Connection(database=os.path.join(os.getcwd(), "ywke_database")) as conn:
 
