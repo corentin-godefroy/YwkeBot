@@ -1,9 +1,7 @@
 from __future__ import annotations
-import os
 from dataclasses import dataclass
 import logging
 from typing import Iterable
-
 from YwkeBot.database.utils import LogType
 from YwkeBot.database.utils import connect
 from YwkeBot.database.video_logs import VideoLogs
@@ -18,17 +16,17 @@ def init_video():
     try:
         with connect() as conn:
             conn.execute("""CREATE TABLE IF NOT EXISTS videos (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    video_file_path TEXT NOT NULL,
-                    video_info_file_path TEXT NOT NULL,
-                    video_url TEXT NOT NULL,
-                    video_number INTEGER NOT NULL,
-                    video_title TEXT NOT NULL,
-                    decyphered_title TEXT,
-                    description TEXT,
-                    decyphered_description TEXT,
-                    duration INTEGER NOT NULL,
-                    wiki_page_url TEXT NOT NULL);""")
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                video_file_path TEXT NOT NULL,
+                video_info_file_path TEXT NOT NULL,
+                video_url TEXT NOT NULL,
+                video_number INTEGER NOT NULL,
+                video_title TEXT NOT NULL,
+                decyphered_title TEXT,
+                description TEXT,
+                decyphered_description TEXT,
+                duration INTEGER NOT NULL,
+                wiki_page_url TEXT NOT NULL);""")
     except Exception as err:
         logger.error(f"Video table creation error: {err}")
         raise err

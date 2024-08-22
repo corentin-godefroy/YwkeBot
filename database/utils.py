@@ -14,6 +14,6 @@ def dict_factory(cursor, row):
     return {key: value for key, value in zip(fields, row)}
 
 def connect():
-    conn = Connection(database=os.path.join(os.getcwd(), "ywke_database"))
+    conn = Connection(database=os.path.join(os.getcwd(), "var/ywke_database"))
     conn.row_factory = dict_factory
     return conn

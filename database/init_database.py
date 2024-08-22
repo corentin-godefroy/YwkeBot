@@ -1,6 +1,5 @@
 import os
 from sqlite3 import Connection
-
 from YwkeBot.database.video import init_video
 from YwkeBot.database.video_logs import init_video_logs
 
@@ -9,9 +8,7 @@ def init_database():
     init_video()
     init_video_logs()
 
-    with Connection(database=os.path.join(os.getcwd(), "ywke_database")) as conn:
-
-
+    with Connection(database=os.path.join(os.getcwd(), "var/ywke_database")) as conn:
     #Users
         conn.execute("""CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -20,10 +17,10 @@ def init_database():
 
     #Keys
         conn.execute("""CREATE TABLE IF NOT EXISTS keys (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    key TEXT NOT NULL,
-                    source TEXT NOT NULL,
-                    creator TEXT NOT NULL references users(id));""")
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            key TEXT NOT NULL,
+            source TEXT NOT NULL,
+            creator TEXT NOT NULL references users(id));""")
 
         conn.execute("""CREATE TABLE IF NOT EXISTS key_logs (
             log_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -34,11 +31,11 @@ def init_database():
 
     #Recipes
         conn.execute("""CREATE TABLE IF NOT EXISTS recipes (
-                    recipe_id INTEGER NOT NULL,
-                    step_index INTEGER NOT NULL,
-                    method_id INTEGER NOT NULL,
-                    settings TEXT NOT NULL,
-                    PRIMARY KEY (recipe_id, step_index));""")
+            recipe_id INTEGER NOT NULL,
+            step_index INTEGER NOT NULL,
+            method_id INTEGER NOT NULL,
+            settings TEXT NOT NULL,
+            PRIMARY KEY (recipe_id, step_index));""")
 
         conn.execute("""CREATE TABLE IF NOT EXISTS recipes_logs (
             log_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -60,9 +57,9 @@ def init_database():
 
     #Bruteforce
         conn.execute("""CREATE TABLE IF NOT EXISTS bruteforces_logs (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    recipe_id NOT NULL REFERENCES recipes(recipe_id),
-                    step_index INTEGER NOT NULL REFERENCES recipes(step_index),
-                    input TEXT NOT NULL,
-                    output TEXT NOT NULL,
-                    score FLOAT NOT NULL);""")
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            recipe_id NOT NULL REFERENCES recipes(recipe_id),
+            step_index INTEGER NOT NULL REFERENCES recipes(step_index),
+            input TEXT NOT NULL,
+            output TEXT NOT NULL,
+            score FLOAT NOT NULL);""")

@@ -57,7 +57,7 @@ def get_channel_number_vids():
 def get_last_vids():
     number_of_vids = get_channel_number_vids()
 
-    with open("last_number_of_videos.txt", 'r+') as file:
+    with open("var/last_number_of_videos.txt", 'r+') as file:
         last_videos = int(file.read())
         file.seek(0)
         file.write(number_of_vids)

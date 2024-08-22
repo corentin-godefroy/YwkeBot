@@ -1,10 +1,9 @@
 from __future__ import annotations
-import os
 from dataclasses import dataclass
+from datetime import datetime, tzinfo, timezone
 from sqlite3 import Connection
 import logging
 from typing import Iterable
-
 from YwkeBot.database.utils import LogType, connect
 
 logger = logging.getLogger(__name__)
@@ -20,6 +19,7 @@ def init_video_logs():
                         video_id INTEGER REFERENCES keys(id),
                         user_id INTEGER NOT NULL REFERENCES users(id),
                         type INTEGER NOT NULL,
+                        timestamp DATETIME NOT NULL,
                         old_value TEXT);""")
     except Exception as err:
         logger.error(f"Video logs table creation error: {err}")
@@ -34,11 +34,12 @@ class VideoLogs:
     user_id: int
     type: LogType
     old_value: str | None
+    timestamp: datetime = datetime.now(timezone.utc)
 
     def _add_video_log(self, connection: Connection):
         try:
-            connection.execute("INSERT INTO video_logs (log_id, video_id, user_id, type, old_value) VALUES (?, ?, ?, ?, ?);",
-                         (self.log_id, self.video_id, self.user_id, self.type, self.old_value))
+            connection.execute("INSERT INTO video_logs (log_id, video_id, user_id, type, old_value, timestamp) VALUES (?, ?, ?, ?, ?, ?);",
+                         (self.log_id, self.video_id, self.user_id, self.type, self.old_value, self.timestamp))
         except Exception as err:
             logger.error(f"Video log insertion error: {err}")
             return False
