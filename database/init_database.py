@@ -1,7 +1,7 @@
 import os
 from sqlite3 import Connection
-from YwkeBot.database.video import init_video
-from YwkeBot.database.video_logs import init_video_logs
+from database.video import init_video
+from database.video_logs import init_video_logs
 
 
 def init_database():

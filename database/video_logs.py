@@ -4,7 +4,7 @@ from datetime import datetime, tzinfo, timezone
 from sqlite3 import Connection
 import logging
 from typing import Iterable
-from YwkeBot.database.utils import LogType, connect
+from database.utils import LogType, connect
 
 logger = logging.getLogger(__name__)
 

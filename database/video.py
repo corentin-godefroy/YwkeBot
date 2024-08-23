@@ -2,9 +2,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 import logging
 from typing import Iterable
-from YwkeBot.database.utils import LogType
-from YwkeBot.database.utils import connect
-from YwkeBot.database.video_logs import VideoLogs
+from database.utils import LogType
+from database.utils import connect
+from database.video_logs import VideoLogs
 
 logger = logging.getLogger(__name__)
 
