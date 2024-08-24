@@ -181,6 +181,7 @@ def create_or_edit_page(session, video_detail):
         'title': page_title,
         'text': template,
         'token': session.csrf_token,
+        'createonly':'true'
     }
     response = session.post(wiki_url, data=edit_payload)
     response_data = response.json()

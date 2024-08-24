@@ -6,6 +6,8 @@ import os
 
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
 if __name__ == "__main__":
     logging.basicConfig(filename=os.path.join(os.getcwd(), "var/logs"), datefmt="%a, %d %b %Y %H:%M:%S", format="%(levelname)s | %(asctime)s | %(message)s", level=logging.INFO)
     init_database()
