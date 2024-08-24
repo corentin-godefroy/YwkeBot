@@ -5,6 +5,7 @@ from yt_dlp import YoutubeDL
 import re
 
 from bruteforce.bruteforce import bruteforce
+from database.utils import connect
 from database.video import Video
 from fandom.upload_file import upload_file
 from youtube.download_thumbnail import thumbnail_downloader
@@ -14,10 +15,12 @@ API_KEY_2 = os.getenv('YOUTUBE_API_KEY_2')
 CHANNEL_ID = os.getenv('TRUTHSAYER_YOUTUBE_ID')
 
 def insert_metadata_into_db(metadata):
+    with connect() as conn:
+        video_number = conn.execute("SELECT MAX(video_number) FROM videos").fetchone()
     wiki_page_name = re.sub(r'[#<>[\]|{}/:"?*]', '', metadata.get('title')).replace(" ", "_")
     Video(video_url= metadata.get('webpage_url'),
         video_title=metadata.get('title'),
-        video_number=int(metadata.get('n_entries')) - int(metadata.get('playlist_index')) + 1,
+        video_number=int(video_number) + 1,
         description=metadata.get('description'),
         duration=metadata.get('duration'),
         video_file_path=os.path.join("/mnt/HDD/HDD2/YWKE_saves/", f"{metadata.get('title')} [{metadata.get('display_id')}].webm"),
