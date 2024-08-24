@@ -1,14 +1,11 @@
 import os
-from importlib.metadata import metadata
-
 from yt_dlp import YoutubeDL
 import re
-
-from bruteforce.bruteforce import bruteforce
 from database.utils import connect
 from database.video import Video
-from fandom.upload_file import upload_file
-from youtube.download_thumbnail import thumbnail_downloader
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_KEY = os.getenv('YOUTUBE_API_KEY')
 API_KEY_2 = os.getenv('YOUTUBE_API_KEY_2')
@@ -44,6 +41,8 @@ def download_last():
     os.makedirs('saves', exist_ok=True)
     with YoutubeDL(params={'playlistreverse': True,"postprocessor_hooks": [post_process_hook], 'restrictfilenames': True, "windowsfilenames":True, "writeinfojson":True, "vcodec":"av01", "download_archive":"var/download_archive", "paths":{"home":"/mnt/HDD/HDD2/YWKE_saves"}}) as ydl:
         ydl.download(url_list=["https://www.youtube.com/@youwillknoweventually"])
+
+
 
 
     # créer page wiki
